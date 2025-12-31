@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visitor Log Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <h1>🔍 Visitor Log Tracker</h1>
+        <p class="subtitle">Monitor your website traffic in real-time</p>
+      </div>
+      <div class="header-right">
+        <button class="btn btn-refresh" onclick="loadLogs()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+          </svg>
+          Refresh
+        </button>
+        <button class="btn btn-clear" onclick="clearLogs()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+          </svg>
+          Clear All
+        </button>
+      </div>
+    </header>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value" id="totalVisits">0</span>
+          <span class="stat-label">Total Visits</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value" id="uniqueIPs">0</span>
+          <span class="stat-label">Unique Visitors</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="2" y1="12" x2="22" y2="12"/>
+            <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value" id="topCountry">-</span>
+          <span class="stat-label">Top Country</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon" style="background: linear-gradient(135deg, #11998e, #38ef7d);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+            <circle cx="8.5" cy="7" r="4"/>
+            <polyline points="17 11 19 13 23 9"/>
+          </svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-value" id="returningVisitors">0</span>
+          <span class="stat-label">Returning Visitors</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Embed Code Section -->
+    <div class="embed-section">
+      <h3>📋 Embed This Tracker</h3>
+      <p>Add this script to any website you want to track:</p>
+      <div class="code-block">
+        <code id="embedCode">&lt;script src="https://visitor-tracker-five.vercel.app/v.js"&gt;&lt;/script&gt;</code>
+        <button class="btn-copy" onclick="copyEmbed()">Copy</button>
+      </div>
+    </div>
+
+    <!-- Full Data Logs Table -->
+    <div class="table-container">
+      <h3>📊 Complete Visitor Data</h3>
+      <div class="table-wrapper">
+        <table class="logs-table full-table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>IP</th>
+              <th>City</th>
+              <th>Country</th>
+              <th>ISP</th>
+              <th>Coordinates</th>
+              <th>Device</th>
+              <th>Model</th>
+              <th>OS</th>
+              <th>Browser</th>
+              <th>Screen</th>
+              <th>Viewport</th>
+              <th>Language</th>
+              <th>Timezone</th>
+              <th>CPU</th>
+              <th>RAM</th>
+              <th>Touch</th>
+              <th>Connection</th>
+              <th>Speed</th>
+              <th>Battery</th>
+              <th>Visitor Type</th>
+              <th>Visit #</th>
+              <th>Scroll</th>
+              <th>Time On Page</th>
+              <th>Page Load</th>
+              <th>Page</th>
+              <th>Referrer</th>
+              <th>Map</th>
+            </tr>
+          </thead>
+          <tbody id="logsBody">
+            <tr>
+              <td colspan="28" class="empty-state">Loading...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = '';
+    let allLogs = [];
+
+    document.addEventListener('DOMContentLoaded', loadLogs);
+
+    async function loadLogs() {
+      try {
+        const [logsRes, statsRes] = await Promise.all([
+          fetch(API_BASE + '/api/logs'),
+          fetch(API_BASE + '/api/stats')
+        ]);
+        
+        allLogs = await logsRes.json();
+        const stats = await statsRes.json();
+        
+        updateStats(stats, allLogs);
+        renderLogs(allLogs);
+      } catch (error) {
+        console.error('Failed to load logs:', error);
+        document.getElementById('logsBody').innerHTML = 
+          '<tr><td colspan="28" class="empty-state">Failed to load logs. Is the server running?</td></tr>';
+      }
+    }
+
+    function updateStats(stats, logs) {
+      document.getElementById('totalVisits').textContent = stats.totalVisits || 0;
+      document.getElementById('uniqueIPs').textContent = stats.uniqueIPs || 0;
+      document.getElementById('topCountry').textContent = stats.topCountries?.[0]?.name || '-';
+      
+      const returningCount = logs.filter(l => l.isReturning).length;
+      document.getElementById('returningVisitors').textContent = returningCount;
+    }
+
+    function renderLogs(logs) {
+      const tbody = document.getElementById('logsBody');
+      
+      if (!logs || logs.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="28" class="empty-state">No visits logged yet.</td></tr>';
+        return;
+      }
+      
+      tbody.innerHTML = logs.map((log) => `
+        <tr>
+          <td class="nowrap">
+            <div class="time-cell">
+              <span class="time">${formatTime(log.timestamp)}</span>
+              <span class="date">${formatDate(log.timestamp)}</span>
+            </div>
+          </td>
+          <td><code class="ip">${log.ip || '-'}</code></td>
+          <td>${log.city || '-'}</td>
+          <td>${log.country || '-'}</td>
+          <td class="small-text">${log.isp || '-'}</td>
+          <td class="nowrap">${formatCoords(log)}</td>
+          <td><span class="badge badge-device">${getDeviceType(log)}</span></td>
+          <td class="small-text">${getDeviceModel(log)}</td>
+          <td>${log.os || '-'}</td>
+          <td><span class="badge badge-browser">${log.browser || '-'}</span></td>
+          <td class="nowrap">${log.screenResolution || '-'}</td>
+          <td class="nowrap">${log.viewportSize || '-'}</td>
+          <td>${log.language || '-'}</td>
+          <td class="small-text">${log.timezone || '-'}</td>
+          <td>${log.cpuCores ? log.cpuCores + ' cores' : '-'}</td>
+          <td>${log.deviceMemory || '-'}</td>
+          <td>${log.touchSupport ? '✅' : '❌'}</td>
+          <td><span class="badge badge-conn">${log.connectionType || '-'}</span></td>
+          <td>${log.connectionSpeed || '-'}</td>
+          <td>${formatBattery(log)}</td>
+          <td><span class="badge ${log.isReturning ? 'badge-returning' : 'badge-new'}">${log.isReturning ? '🔄 Returning' : '🆕 New'}</span></td>
+          <td>${log.visitCount || 1}</td>
+          <td>${log.scrollDepth || '0%'}</td>
+          <td>${log.timeOnPage || '0s'}</td>
+          <td>${log.pageLoadTime || '-'}</td>
+          <td class="small-text">${truncateUrl(log.page, 20)}</td>
+          <td class="small-text">${log.referrer === 'Direct' ? 'Direct' : truncateUrl(log.referrer, 15)}</td>
+          <td>${log.latitude && log.longitude ? `<a href="https://www.google.com/maps?q=${log.latitude},${log.longitude}" target="_blank" class="map-btn">🗺️</a>` : '-'}</td>
+        </tr>
+      `).join('');
+    }
+
+    function formatTime(timestamp) {
+      return new Date(timestamp).toLocaleTimeString('en-US', { 
+        hour: '2-digit', 
+        minute: '2-digit'
+      });
+    }
+
+    function formatDate(timestamp) {
+      return new Date(timestamp).toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric'
+      });
+    }
+
+    function formatCoords(log) {
+      if (log.latitude && log.longitude) {
+        const src = log.locationSource === 'gps' ? '📍' : '🌐';
+        return `${src} ${Number(log.latitude).toFixed(4)}, ${Number(log.longitude).toFixed(4)}`;
+      }
+      return '-';
+    }
+
+    function formatBattery(log) {
+      if (log.batteryLevel) {
+        const charging = log.batteryCharging ? '⚡' : '';
+        return `${charging}${log.batteryLevel}`;
+      }
+      return '-';
+    }
+
+    function getDeviceType(log) {
+      const dt = log.deviceType;
+      if (!dt || dt === 'undefined' || dt === 'Unknown') {
+        const os = (log.os || '').toLowerCase();
+        const dn = (log.deviceName || '').toLowerCase();
+        if (os.includes('android') || os.includes('ios') || dn.includes('iphone') || dn.includes('samsung') || dn.includes('xiaomi')) {
+          return 'Mobile';
+        }
+        if (dn.includes('ipad') || dn.includes('tablet')) {
+          return 'Tablet';
+        }
+        return 'Desktop';
+      }
+      return dt;
+    }
+
+    function getDeviceModel(log) {
+      const dn = log.deviceName;
+      if (dn && dn !== 'Unknown Device' && dn !== 'undefined' && dn !== 'Unknown') {
+        return dn;
+      }
+      return log.platform || '-';
+    }
+
+    function truncateUrl(url, maxLen = 30) {
+      if (!url || url === 'Direct') return url || '-';
+      try {
+        const parsed = new URL(url);
+        const path = parsed.pathname;
+        return path.length > maxLen ? path.substring(0, maxLen) + '...' : path || '/';
+      } catch {
+        return url.length > maxLen ? url.substring(0, maxLen) + '...' : url;
+      }
+    }
+
+    async function clearLogs() {
+      if (!confirm('Are you sure you want to clear all logs?')) return;
+      try {
+        await fetch(API_BASE + '/api/logs', { method: 'DELETE' });
+        loadLogs();
+      } catch (error) {
+        alert('Failed to clear logs');
+      }
+    }
+
+    function copyEmbed() {
+      const code = document.getElementById('embedCode').textContent;
+      navigator.clipboard.writeText(code);
+      const btn = document.querySelector('.btn-copy');
+      btn.textContent = 'Copied!';
+      setTimeout(() => btn.textContent = 'Copy', 2000);
+    }
+
+    // Auto-refresh every 30 seconds
+    setInterval(loadLogs, 30000);
+  </script>
+</body>
+</html>
